@@ -10,15 +10,17 @@ function isAuth (req, res, next) {
   }
 
   const token = req.header('Authorization').split(" ")[1]
-  const payload = jwt.decode(token, config.SECRET_TOKEN)
+  
+  const payload = jwt.decode(token, config.SECRET_TOKEN, true)
 
+  // console.log("Payload: " + JSON.stringify(payload));
   if (payload.exp <= moment().unix()){
-    res.status(401).send({message: `El token ha expirado`})
+    res.status(401).send({message: `La sesión ha expirado`});
   }
-
+  else{
   req.user = payload.sub
-
-  next()
+  next();
+  }
 }
 
 module.exports = {isAuth:isAuth}

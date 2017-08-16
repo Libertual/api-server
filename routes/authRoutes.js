@@ -1,12 +1,13 @@
 'use strict'
-const express     = require('express')
+const express       = require('express')
+const authRoutes    = express.Router()
+
 // Controllers
-const authCtrl = require('../controllers/authCtrl')
+const authCtrl      = require('../controllers/authCtrl')
 // Middlewares
-const authMid        = require('../middlewares/authMidlw')
+const authMid       = require('../middlewares/authMidlw')
 
-const authRoutes = express.Router()
-
+// Routes
 authRoutes.put('/login', authCtrl.login)
 authRoutes.post('/register', authCtrl.register)
 

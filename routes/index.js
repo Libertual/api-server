@@ -23,4 +23,5 @@ api.get('/private', auth.isAuth, function (req, res) {
   res.status(200).send({message: `Tienes Acceso`})
 })
 
+
 module.exports = api

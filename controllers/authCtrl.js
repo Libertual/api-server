@@ -26,13 +26,15 @@ function register(req, res){
 }
 
 function login(req, res){
+  console.log(JSON.stringify(req.body));
+
     User.findOne({email: req.body.email}, "+password", (err, user) => {
       if (err) return res.statu(500).send({message: `Error en la petición`})
       if(!user) return res.status(404).send({message: `Error, usuario no encontrado: ${req.body.email}`})
 
       user.comparePasword(req.body.password, (err, isMatch) =>{
         if (err) return res.status(500).send({message: `Error al comprobar la password`})
-        if (!isMatch) return res.status(418).send({message: `Usuario incorrecto`})
+        if (!isMatch) return res.status(401).send({message: `Error, contraseña incorrecta`})
         //  devolver token
         res.status(200).send({
           token: service.createToken(user),

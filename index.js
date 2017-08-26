@@ -3,10 +3,10 @@
 const mongoose    = require('mongoose')
 
 const app         = require('./app')
-const config      = require('./config')
+const config      = require('./config/main')
 
 mongoose.Promise = require('bluebird');
-mongoose.connect(config.DB, (err,res) => {
+mongoose.connect(config.DB, { useMongoClient: true }, (err,res) => {
   if (err) {
     console.log(`Error al conectarse a la base de datos... ${err}`)
   }

@@ -2,11 +2,11 @@
 
 const jwt = require('jwt-simple')
 const moment = require('moment')
-const config = require('../config')
+const config = require('../config/main')
 
 function isAuth (req, res, next) {
   if(!req.headers.authorization) {
-    return res.status(403).send({message: 'No tienes autorización'})
+    return res.status(403).send({message: 'No estás conectado.'})
   }
 
   const token = req.header('Authorization').split(" ")[1]

@@ -6,11 +6,24 @@ const bcrypt    = require('bcrypt-nodejs')
 const crypto    = require('crypto')
 
 const userSchema = Schema({
-  email: {type: String, unique: true, lowercase: true},
+  email: {
+    type: String,
+    unique: true,
+    lowercase: true,
+    required: true
+  },
   displayName: String,
   avatar: String,
-  password: {type: String, select: false},
-  signupDate: {type: Date, default: Date.now() },
+  password: {
+    type: String,
+    select: false,
+    required: true
+  },
+  signupDate: {
+    type: Date,
+    select: false,
+    default: Date.now()
+  },
   lastLogin: Date,
   google: String
 })
@@ -32,7 +45,6 @@ userSchema.methods.gravatar = function (){
 
   const md5 = crypto.createHash('md5').update(this.email).digest('hex')
   return `https://gravatar.com/avatar/${md5}?s=200&d=retro`
-
 }
 userSchema.methods.comparePasword = function (attemptedPassword, done) {
     bcrypt.compare(attemptedPassword, this.password, function (err, isMatch) {

@@ -23,4 +23,3 @@ app.use('/auth', authRoutes);
 app.use('/account', accountRoutes);
 
 module.exports = app
-

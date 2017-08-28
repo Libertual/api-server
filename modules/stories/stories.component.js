@@ -1,4 +1,6 @@
+
 const Story = require('./_models/story.model');
+const User = require('../../models/userModel');
 
 function newStory(req, res) {
   const story = new Story({
@@ -26,6 +28,19 @@ function newStory(req, res) {
   });
   return true;
 }
+function getUserTimeline(req, res) {
+  // console.log(req.params.user);
+  let usuario = new User();
+
+  User.findOne({ displayName: req.params.user }, (err, user) => {
+    usuario = user;
+  });
+  Story.find({ 'user.displayName': req.params.user }, (err, stories) => {
+    res.status(200).send({ message: 'Request Acepted', stories, user: usuario });
+  });
+  // res.status(200).send('User Timeline');
+}
 module.exports = {
-  newStory
+  newStory,
+  getUserTimeline
 };

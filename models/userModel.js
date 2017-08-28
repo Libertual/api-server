@@ -1,9 +1,9 @@
-'use strict'
 
-const mongoose  = require('mongoose')
-const Schema    = mongoose.Schema
-const bcrypt    = require('bcrypt-nodejs')
-const crypto    = require('crypto')
+const mongoose  = require('mongoose');
+const bcrypt    = require('bcrypt-nodejs');
+const crypto    = require('crypto');
+
+const Schema    = mongoose.Schema;
 
 const userSchema = Schema({
   email: {
@@ -26,30 +26,32 @@ const userSchema = Schema({
   },
   lastLogin: Date,
   google: String
-})
+});
 
-userSchema.pre('save', function(next) {
-  let user = this
-  if(!user.isModified('password')) return next()
-  bcrypt.genSalt(10, (err, salt) =>{
-    bcrypt.hash(user.password, salt, null, (err, hash) => {
-      if (err) return next(err)
-      user.password = hash
-      next()
-    })
-  })
-})
+userSchema.pre('save', (next) => {
+  const user = this;
+  if (!user.isModified('password')) return next();
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(user.password, salt, null, (error, hash) => {
+      if (error) return next(err);
+      user.password = hash;
+      next();
+      return true;
+    });
+  });
+  return true;
+});
 
-userSchema.methods.gravatar = function (){
-  if(!this.email) return `https://gravatar.com/avatar/?s=200&d=retro`
+userSchema.methods.gravatar = () => {
+  if (!this.email) return 'https://gravatar.com/avatar/?s=200&d=retro';
 
-  const md5 = crypto.createHash('md5').update(this.email).digest('hex')
-  return `https://gravatar.com/avatar/${md5}?s=200&d=retro`
-}
-userSchema.methods.comparePasword = function (attemptedPassword, done) {
-    bcrypt.compare(attemptedPassword, this.password, function (err, isMatch) {
-      done(err, isMatch);
-    })
-}
+  const md5 = crypto.createHash('md5').update(this.email).digest('hex');
+  return `https://gravatar.com/avatar/${md5}?s=200&d=retro`;
+};
+userSchema.methods.comparePasword = (attemptedPassword, done) => {
+  bcrypt.compare(attemptedPassword, this.password, (err, isMatch) => {
+    done(err, isMatch);
+  });
+};
 
-module.exports = mongoose.model('user', userSchema)
+module.exports = mongoose.model('user', userSchema);

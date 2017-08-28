@@ -9,7 +9,7 @@ const cors          = require('cors');
 const api           = require('./routes/index');
 const authRoutes    = require('./routes/authRoutes');
 const accountRoutes = require('./routes/accountRoutes');
-const StoriesRoutes = require('./modules/stories.routes');
+const StoriesRoutes = require('./modules/stories/stories.routes');
 
 const app = express();
 

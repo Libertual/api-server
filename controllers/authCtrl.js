@@ -7,6 +7,7 @@ const service = require('../services');
 
 function register(req, res) {
   const user = new User({
+    username: req.body.userName,
     email: req.body.email,
     displayName: req.body.displayName,
     password: req.body.password
@@ -16,12 +17,12 @@ function register(req, res) {
   user.save((err) => {
     // console.log(err);
     if (err) {
-      if (err.code === '11000') return res.status(422).send({
-        message: `Error, ya existe un usuario con email ${req.body.emailmongo}`
-      });
-      return res.status(500).send({ message: 'Error al crear el usuario' });
+      if (err.code === 11000)
+        return res.status(422).send({
+          message: `Error, ya existe un usuario con email ${req.body.email}`
+        });
+      return res.status(500).send({ message: `Error al crear el usuario ${err.code}` });
     }
-
     return res.status(200).send({
       message: 'Usuario registrado correctamente',
       token: service.createToken(user)

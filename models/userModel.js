@@ -6,6 +6,11 @@ const crypto    = require('crypto');
 const Schema    = mongoose.Schema;
 
 const userSchema = Schema({
+  userName: {
+    type: String,
+    unique: true,
+    required: true
+  },
   email: {
     type: String,
     unique: true,
@@ -25,10 +30,19 @@ const userSchema = Schema({
     default: Date.now()
   },
   lastLogin: Date,
-  google: String
+  externalIds: {
+    google: String,
+    facebook: String
+  },
+  counter: {
+    beats: { type: Number, default: 0 },
+    followers: { type: Number, default: 0 },
+    friends: { type: Number, default: 0 }
+  },
+  active: { type: Boolean, default: true }
 });
 
-userSchema.pre('save', (next) => {
+userSchema.pre('save', function (next) {
   const user = this;
   if (!user.isModified('password')) return next();
   bcrypt.genSalt(10, (err, salt) => {
@@ -48,7 +62,7 @@ userSchema.methods.gravatar = () => {
   const md5 = crypto.createHash('md5').update(this.email).digest('hex');
   return `https://gravatar.com/avatar/${md5}?s=200&d=retro`;
 };
-userSchema.methods.comparePasword = (attemptedPassword, done) => {
+userSchema.methods.comparePasword = function (attemptedPassword, done) {
   bcrypt.compare(attemptedPassword, this.password, (err, isMatch) => {
     done(err, isMatch);
   });

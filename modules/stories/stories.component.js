@@ -3,6 +3,7 @@ const Story = require('./_models/story.model');
 const User = require('../../models/userModel');
 
 function newStory(req, res) {
+  // console.log(`Body: ${req.body}`);
   const story = new Story({
     story: req.body.story,
     more: req.body.more || undefined,
@@ -16,26 +17,32 @@ function newStory(req, res) {
   });
   story.save((err) => {
     if (err) {
-      console.log(`Error: ${err}`);
+      console.error(`Error: ${err}`);
       return res.status(500).send({
         message: 'Error: Story not saved.'
       });
     }
-    return res.status(200).send({
-      message: 'New Story Route created',
-      story
+    User.findByIdAndUpdate(req.body.user._id, { $inc: { 'counter.beats': 1 } }, { new: true }, (error, userUpdated) => {
+      if (error) console.error(`Error: ${error}`);
+      return userUpdated;
     });
+    return true;
   });
-  return true;
+  return res.status(200).send({
+    message: 'New story saved',
+    story
+  });
 }
+
 function getUserTimeline(req, res) {
-  // console.log(req.params.user);
+  // console.log(`Params: ${JSON.stringify(req.params)}`);
   let usuario = new User();
 
-  User.findOne({ displayName: req.params.user }, (err, user) => {
+  User.find({ userName: req.params.userName }, (err, user) => {
     usuario = user;
   });
-  Story.find({ 'user.displayName': req.params.user }, (err, stories) => {
+  // console.log(req.params.userName);
+  Story.find({ 'user.userName': req.params.userName }, (err, stories) => {
     res.status(200).send({ message: 'Request Acepted', stories, user: usuario });
   });
   // res.status(200).send('User Timeline');

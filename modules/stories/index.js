@@ -1,5 +1,5 @@
-const CreateHistory = require('./stories/create-story.component.js');
+const StoriesComponent = require('./stories.component.js');
 
 module.exports = {
-  CreateHistory
+  StoriesComponent
 };

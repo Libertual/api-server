@@ -16,7 +16,8 @@ const StorySchema = Schema({
   },
   user: {
     _id: { type: Schema.ObjectId, ref: User },
-    displayName: String
+    displayName: String,
+    userName: String
   }
 });
 

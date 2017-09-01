@@ -11,7 +11,7 @@ function getSettings(req, res) {
     if (!user) return res.status(404).send({
       message: 'User does not exist'
     });
-
+    // console.log(user.displayName);
     return res.status(200).send({
       user
     });

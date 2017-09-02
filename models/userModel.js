@@ -1,4 +1,4 @@
-
+const moment    = require('moment');
 const mongoose  = require('mongoose');
 const bcrypt    = require('bcrypt-nodejs');
 const crypto    = require('crypto');
@@ -27,7 +27,7 @@ const userSchema = Schema({
   signupDate: {
     type: Date,
     select: false,
-    default: Date.now()
+    default: moment()
   },
   lastLogin: Date,
   externalIds: {
@@ -39,7 +39,8 @@ const userSchema = Schema({
     followers: { type: Number, default: 0 },
     friends: { type: Number, default: 0 }
   },
-  active: { type: Boolean, default: true }
+  active: { type: Boolean, default: true },
+  stories: []
 });
 
 userSchema.pre('save', function (next) {
@@ -56,12 +57,13 @@ userSchema.pre('save', function (next) {
   return true;
 });
 
-userSchema.methods.gravatar = () => {
+userSchema.methods.gravatar = function () {
+  console.log(`Gravatar de ${this.email}`);
   if (!this.email) return 'https://gravatar.com/avatar/?s=200&d=retro';
-
   const md5 = crypto.createHash('md5').update(this.email).digest('hex');
   return `https://gravatar.com/avatar/${md5}?s=200&d=retro`;
 };
+
 userSchema.methods.comparePasword = function (attemptedPassword, done) {
   bcrypt.compare(attemptedPassword, this.password, (err, isMatch) => {
     done(err, isMatch);

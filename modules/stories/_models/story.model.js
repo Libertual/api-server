@@ -1,4 +1,5 @@
 
+const moment = require('moment');
 const Mongoose = require('mongoose');
 
 const Schema  = Mongoose.Schema;
@@ -11,9 +12,9 @@ const StorySchema = Schema({
   more: String,
   composeDate: {
     type: Date,
-    select: false,
-    default: Date.now()
+    default: moment()
   },
+  active: { type: Boolean, default: true },
   user: {
     _id: { type: Schema.ObjectId, ref: User },
     displayName: String,

@@ -34,20 +34,40 @@ function newStory(req, res) {
   });
 }
 
+function destroyStory(req, res) {
+  // console.log(`Body: ${req.body}`);
+  Story.findByIdAndUpdate(
+    req.params.id,
+    { active: false },
+    { new: true },
+    (error, storyUpdated) => {
+      if (error) res.status(200).send({ message: `Error: ${error}` });
+      User.findByIdAndUpdate(storyUpdated.user._id, { $inc: { 'counter.beats': -1 } }, { new: true }, (err, userUpdated) => {
+        if (err) console.error(`Error: ${err}`);
+        return userUpdated;
+      });
+      return res.status(200).send({
+        message: 'Story deleted',
+        storyUpdated
+      });
+    });
+}
+
 function getUserTimeline(req, res) {
   // console.log(`Params: ${JSON.stringify(req.params)}`);
   let usuario = new User();
 
-  User.find({ userName: req.params.userName }, (err, user) => {
+  User.find({ userName: req.params.userName, active: true }, (err, user) => {
     usuario = user;
   });
   // console.log(req.params.userName);
-  Story.find({ 'user.userName': req.params.userName }, (err, stories) => {
+  Story.find({ 'user.userName': req.params.userName, active: true }, (err, stories) => {
     res.status(200).send({ message: 'Request Acepted', stories, user: usuario });
-  });
+  }).sort({ composeDate: -1 });
   // res.status(200).send('User Timeline');
 }
 module.exports = {
   newStory,
-  getUserTimeline
+  getUserTimeline,
+  destroyStory
 };

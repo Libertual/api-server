@@ -40,7 +40,8 @@ const userSchema = Schema({
     friends: { type: Number, default: 0 }
   },
   active: { type: Boolean, default: true },
-  stories: []
+  friends: [{ type: Schema.ObjectId, ref: 'user' }],
+  followers: [{ type: Schema.ObjectId, ref: 'user' }]
 });
 
 userSchema.pre('save', function (next) {
@@ -58,7 +59,7 @@ userSchema.pre('save', function (next) {
 });
 
 userSchema.methods.gravatar = function () {
-  console.log(`Gravatar de ${this.email}`);
+  // console.log(`Gravatar de ${this.email}`);
   if (!this.email) return 'https://gravatar.com/avatar/?s=200&d=retro';
   const md5 = crypto.createHash('md5').update(this.email).digest('hex');
   return `https://gravatar.com/avatar/${md5}?s=200&d=retro`;

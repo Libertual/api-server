@@ -52,6 +52,7 @@ function unFollowUser(req, res) {
         { new: true },
         (error, user) => {
           if (err) return res.status(500).send({ message: `Error, user ${user.displayName} can't be updated` });
+          return true;
         });
       return res.status(200).send({ message: `Unfollowing user ${req.body.userId}`, user: userUpdated });
     });

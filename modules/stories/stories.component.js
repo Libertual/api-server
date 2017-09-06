@@ -17,10 +17,10 @@ function newStory(req, res) {
   if (story.story === 'error') return res.status(500).send({
     message: 'Error: Story not saved'
   });
-  console.log(story);
+  // console.log(story);
   story.save((err) => {
     if (err) {
-      console.error(`Error: ${err}`);
+      // console.error(`Error: ${err}`);
       return res.status(500).send({
         message: 'Error: Story not saved.'
       });

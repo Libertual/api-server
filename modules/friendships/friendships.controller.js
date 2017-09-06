@@ -31,8 +31,8 @@ function followUser(req, res) {
 }
 
 function unFollowUser(req, res) {
-  console.log('unFollow User');
-  console.log(req.body);
+  // console.log('unFollow User');
+  // console.log(req.body);
 
   User.findByIdAndUpdate(
     { _id: req.user },
@@ -42,7 +42,7 @@ function unFollowUser(req, res) {
     },
     { new: true },
     (err, userUpdated) => {
-      if (err) return res.status(500).send({ message: 'Error, ' });
+      if (err) return res.status(500).send({ message: `Error, ${err}` });
       User.findByIdAndUpdate(
         { _id: req.body.userId },
         {
@@ -52,9 +52,8 @@ function unFollowUser(req, res) {
         { new: true },
         (error, user) => {
           if (err) return res.status(500).send({ message: `Error, user ${user.displayName} can't be updated` });
-          return true;
         });
-      return res.status(200).send({ message: `Following user ${req.body.userId}`, user: userUpdated });
+      return res.status(200).send({ message: `Unfollowing user ${req.body.userId}`, user: userUpdated });
     });
 }
 

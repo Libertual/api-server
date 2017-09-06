@@ -1,3 +1,4 @@
+const moment = require('moment');
 
 const Story = require('./_models/story.model');
 const User = require('../../models/userModel');
@@ -7,7 +8,8 @@ function newStory(req, res) {
   const story = new Story({
     story: req.body.story,
     more: req.body.more || undefined,
-    user: req.body.user
+    user: req.body.user,
+    composeDate: moment()
   });
   // if (req.body.more === '') story.more = undefined;
 
@@ -15,6 +17,7 @@ function newStory(req, res) {
   if (story.story === 'error') return res.status(500).send({
     message: 'Error: Story not saved'
   });
+  console.log(story);
   story.save((err) => {
     if (err) {
       console.error(`Error: ${err}`);

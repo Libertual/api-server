@@ -76,13 +76,13 @@ function getHomeTimeline(req, res) {
   // console.log(`User logged: ${req.user}`);
 
   User.findOne({ _id: req.user }, { friends: true, _id: false }, (error, user) => {
-    console.log(user.friends);
+    // console.log(user.friends);
     if (error) res.status(500).send({ message: `Error: ${error}` });
     Story.find({ 'user._id': { $in: user.friends }, active: true })
       .populate('users')
       .sort({ composeDate: -1 })
       .exec((err, stories) => {
-        console.log(`Stories: ${stories}`);
+        // console.log(`Stories: ${stories}`);
         res.status(200).send({ message: 'Request Acepted', stories });
       });
     // console.log(`Stories: ${this.allStories}`);

@@ -19,7 +19,7 @@ function register(req, res) {
     if (err) {
       if (err.code === 11000)
         return res.status(422).send({
-          message: `Error, ya existe un usuario con email ${req.body.email}`
+          message: `Error, user duplicated ${req.body.email}`
         });
       return res.status(500).send({ message: `Error al crear el usuario ${err}` });
     }
@@ -32,13 +32,15 @@ function register(req, res) {
 
 function login(req, res) {
   // console.log(JSON.stringify(req.body));
+//  console.log(`Username: ${req.body.userName}`);
 
-  User.findOne({ email: req.body.email }, '+password', (err, user) => {
+  User.findOne({ userName: req.body.userName }, '+password', (err, user) => {
     if (err) return res.statu(500).send({
       message: 'Error en la petición'
     });
+    // console.log(`User: ${user}`);
     if (!user) return res.status(404).send({
-      message: `Error, usuario no encontrado: ${req.body.email}`
+      message: `Error, usuario no encontrado: ${req.body.userName}`
     });
 
     user.comparePasword(req.body.password, (error, isMatch) => {
@@ -55,7 +57,7 @@ function login(req, res) {
       });
     });
     return null;
-  });
+  }).collation({ locale: 'en', strength: 2 });
 }
 
 module.exports = {

@@ -1,3 +1,4 @@
+
 const moment = require('moment');
 
 const Story = require('./_models/story.model');
@@ -20,7 +21,7 @@ function newStory(req, res) {
   // console.log(story);
   story.save((err) => {
     if (err) {
-      // console.error(`Error: ${err}`);
+      console.error(`Error: ${err}`);
       return res.status(500).send({
         message: 'Error: Story not saved.'
       });
@@ -69,8 +70,27 @@ function getUserTimeline(req, res) {
   }).sort({ composeDate: -1 });
   // res.status(200).send('User Timeline');
 }
+
+function getHomeTimeline(req, res) {
+  // console.log(`Params: ${JSON.stringify(req.params)}`);
+  // console.log(`User logged: ${req.user}`);
+
+  User.findOne({ _id: req.user }, { friends: true, _id: false }, (error, user) => {
+    console.log(user.friends);
+    if (error) res.status(500).send({ message: `Error: ${error}` });
+    Story.find({ 'user._id': { $in: user.friends }, active: true })
+      .populate('users')
+      .sort({ composeDate: -1 })
+      .exec((err, stories) => {
+        console.log(`Stories: ${stories}`);
+        res.status(200).send({ message: 'Request Acepted', stories });
+      });
+    // console.log(`Stories: ${this.allStories}`);
+  });
+}
 module.exports = {
   newStory,
   getUserTimeline,
+  getHomeTimeline,
   destroyStory
 };

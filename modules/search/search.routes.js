@@ -6,11 +6,12 @@ const SearchRoutes = express.Router();
 // Controllers
 const SearchCtrl   = require('./search.controller');
 // Middlewares
-const authMid       = require('../../middlewares/authMidlw');
+// const authMid       = require('../../middlewares/authMidlw');
 
-SearchRoutes.use(authMid.isAuth);
+// SearchRoutes.use(authMid.isAuth);
 // Routes 'account'
 SearchRoutes.get('/users', SearchCtrl.getUsersList);
+SearchRoutes.get('/:search', SearchCtrl.search);
 
 
 module.exports = SearchRoutes;

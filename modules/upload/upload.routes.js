@@ -17,9 +17,9 @@ const fs = require('fs');
 // UploadRoutes.use(authMid.isAuth);
 // Routes 'account'
 UploadRoutes.post('/', type, (req, res) => {
-  console.log(`Upload Story: ${req.file}`);
+  // console.log(`Upload Story: ${req.file}`);
   const tmpPath = req.file.path;
-  console.log(tmpPath);
+  // console.log(tmpPath);
 
   /** The original name of the uploaded file
     stored in the variable "originalname". */

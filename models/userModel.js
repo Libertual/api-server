@@ -29,7 +29,7 @@ const userSchema = Schema({
     select: false,
     default: moment()
   },
-  lastLogin: Date,
+  lastLogin: Date, // TODO: Implementar esta caracteristica en la funcion de login.
   externalIds: {
     google: String,
     facebook: String
@@ -41,7 +41,8 @@ const userSchema = Schema({
   },
   active: { type: Boolean, default: true },
   friends: [{ type: Schema.ObjectId, ref: 'user' }],
-  followers: [{ type: Schema.ObjectId, ref: 'user' }]
+  followers: [{ type: Schema.ObjectId, ref: 'user' }],
+  info: String
 });
 
 userSchema.pre('save', function (next) {

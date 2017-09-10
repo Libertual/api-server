@@ -13,7 +13,6 @@ function getUsersList(req, res) {
 function search(req, res) {
   const searchTerms = req.params.search;
   // console.log(searchTerms);
-
   User.find({ $text: { $search: searchTerms } }, (err, users) => {
     if (err) return res.status(500).send({ message: 'Error, ' });
     // console.log(`Users: ${users}`);

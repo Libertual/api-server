@@ -77,6 +77,7 @@ function getHomeTimeline(req, res) {
 
   User.findOne({ _id: req.user }, { friends: true, _id: false }, (error, user) => {
     // console.log(user.friends);
+    user.friends.push(req.user);
     if (error) res.status(500).send({ message: `Error: ${error}` });
     Story.find({ 'user._id': { $in: user.friends }, active: true })
       .populate('users')

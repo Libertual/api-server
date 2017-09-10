@@ -25,6 +25,7 @@ function getSettings(req, res) {
 function changeSettings(req, res) {
   const userId = req.user; // UserId fron autentication header
   const user = req.body; // User from req.body
+  console.log(req.body);
   if (userId !== user._id) return res.status(500).send(
     { message: 'Error al actualizar el usuario en la base de datos: No estás autorizado ' }
   );

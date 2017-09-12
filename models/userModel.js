@@ -43,7 +43,7 @@ const userSchema = Schema({
   friends: [{ type: Schema.ObjectId, ref: 'user' }],
   followers: [{ type: Schema.ObjectId, ref: 'user' }],
   info: String
-});
+}, { timestamps: true });
 
 userSchema.pre('save', function (next) {
   const user = this;

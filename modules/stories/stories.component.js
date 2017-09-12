@@ -1,5 +1,5 @@
 
-const moment = require('moment');
+// const moment = require('moment');
 
 const Story = require('./_models/story.model');
 const User = require('../../models/userModel');
@@ -9,12 +9,12 @@ function newStory(req, res) {
   const story = new Story({
     story: req.body.story,
     more: req.body.more || undefined,
-    user: req.body.user,
-    composeDate: moment()
+    files: req.body.files,
+    user: req.body.user
   });
   // if (req.body.more === '') story.more = undefined;
 
-  // console.log(`New Story Route ${story}`);
+  // console.log(`New Story ${story}`);
   if (story.story === 'error') return res.status(500).send({
     message: 'Error: Story not saved'
   });

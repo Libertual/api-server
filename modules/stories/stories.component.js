@@ -1,4 +1,3 @@
-
 // const moment = require('moment');
 
 const Story = require('./_models/story.model');
@@ -67,21 +66,20 @@ function getUserTimeline(req, res) {
   // console.log(req.params.userName);
   Story.find({ 'user.userName': req.params.userName, active: true }, (err, stories) => {
     res.status(200).send({ message: 'Request Acepted', stories, user: usuario });
-  }).sort({ composeDate: -1 });
+  }).sort({ createdAt: -1 });
   // res.status(200).send('User Timeline');
 }
 
 function getHomeTimeline(req, res) {
   // console.log(`Params: ${JSON.stringify(req.params)}`);
   // console.log(`User logged: ${req.user}`);
-
   User.findOne({ _id: req.user }, { friends: true, _id: false }, (error, user) => {
     // console.log(user.friends);
     user.friends.push(req.user);
     if (error) res.status(500).send({ message: `Error: ${error}` });
     Story.find({ 'user._id': { $in: user.friends }, active: true })
       .populate('users')
-      .sort({ composeDate: -1 })
+      .sort({ createdAt: -1 })
       .exec((err, stories) => {
         // console.log(`Stories: ${stories}`);
         res.status(200).send({ message: 'Request Acepted', stories });

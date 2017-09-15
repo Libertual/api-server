@@ -18,7 +18,10 @@ const StorySchema = Schema({
   user: {
     _id: { type: Schema.ObjectId, ref: 'users' },
     displayName: String,
-    userName: String
+    userName: String,
+    avatar: {
+      filename: String
+    }
   },
   files: [{
     _id: { type: Schema.ObjectId, ref: 'files' },

@@ -31,4 +31,5 @@ app.use('/search', SearchRoutes);
 app.use('/friendships', FriendshipsRoutes);
 app.use('/:user', UserRoutes);
 app.use('/upload', UploadRoutes);
+app.use('/img', express.static('upload'));
 module.exports = app;

@@ -1,7 +1,7 @@
 const moment    = require('moment');
 const mongoose  = require('mongoose');
 const bcrypt    = require('bcrypt-nodejs');
-const crypto    = require('crypto');
+// const crypto    = require('crypto'); // For use in avatar function
 
 const Schema    = mongoose.Schema;
 
@@ -18,7 +18,10 @@ const userSchema = Schema({
     required: true
   },
   displayName: String,
-  avatar: String,
+  avatar: {
+    _id: { type: Schema.ObjectId, ref: 'user', default: '59b94087115c0d305a3d9a7f' },
+    filename: { type: String, default: 'beat.svg' }
+  },
   password: {
     type: String,
     select: false,
@@ -43,7 +46,7 @@ const userSchema = Schema({
   friends: [{ type: Schema.ObjectId, ref: 'user' }],
   followers: [{ type: Schema.ObjectId, ref: 'user' }],
   info: String
-});
+}, { timestamps: true });
 
 userSchema.pre('save', function (next) {
   const user = this;
@@ -59,12 +62,12 @@ userSchema.pre('save', function (next) {
   return true;
 });
 
-userSchema.methods.gravatar = function () {
-  // console.log(`Gravatar de ${this.email}`);
-  if (!this.email) return 'https://gravatar.com/avatar/?s=200&d=retro';
-  const md5 = crypto.createHash('md5').update(this.email).digest('hex');
-  return `https://gravatar.com/avatar/${md5}?s=200&d=retro`;
-};
+// userSchema.methods.gravatar = function () {
+//   // console.log(`Gravatar de ${this.email}`);
+//   if (!this.email) return 'https://gravatar.com/avatar/?s=200&d=retro';
+//   const md5 = crypto.createHash('md5').update(this.email).digest('hex');
+//   return `https://gravatar.com/avatar/${md5}?s=200&d=retro`;
+// };
 
 userSchema.methods.comparePasword = function (attemptedPassword, done) {
   bcrypt.compare(attemptedPassword, this.password, (err, isMatch) => {

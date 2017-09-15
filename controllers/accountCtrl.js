@@ -14,7 +14,7 @@ function getSettings(req, res) {
       message: 'User does not exist'
     });
     this.user = userSet;
-    this.user.avatar = userSet.gravatar();
+    // this.user.avatar = userSet.gravatar();
     return res.status(200).send({
       user: this.user
     });

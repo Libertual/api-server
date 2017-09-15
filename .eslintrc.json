@@ -1,7 +1,7 @@
 {
     "extends": "airbnb-base",
     "rules": {
-      "no-underscore-dangle": [2, { "allow": ["_id"] }],
+      "no-underscore-dangle": [2, { "allow": ["_id", "__v"] }],
       "comma-dangle": ["error", "never"],
       "curly": ["error", "multi", "consistent"],
       "no-multi-spaces": ["error",{
@@ -9,6 +9,6 @@
            "VariableDeclarator": true
          }
       }],
-      "no-console": ["error", { "allow": ["warn", "error"] }]
+      "no-console": ["warn", { "allow": ["warn", "error"] }]
     }
 }

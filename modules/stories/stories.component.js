@@ -1,5 +1,4 @@
-
-const moment = require('moment');
+// const moment = require('moment');
 
 const Story = require('./_models/story.model');
 const User = require('../../models/userModel');
@@ -9,12 +8,12 @@ function newStory(req, res) {
   const story = new Story({
     story: req.body.story,
     more: req.body.more || undefined,
-    user: req.body.user,
-    composeDate: moment()
+    files: req.body.files,
+    user: req.body.user
   });
   // if (req.body.more === '') story.more = undefined;
 
-  // console.log(`New Story Route ${story}`);
+  // console.log(`New Story ${story}`);
   if (story.story === 'error') return res.status(500).send({
     message: 'Error: Story not saved'
   });
@@ -67,21 +66,20 @@ function getUserTimeline(req, res) {
   // console.log(req.params.userName);
   Story.find({ 'user.userName': req.params.userName, active: true }, (err, stories) => {
     res.status(200).send({ message: 'Request Acepted', stories, user: usuario });
-  }).sort({ composeDate: -1 });
+  }).sort({ createdAt: -1 });
   // res.status(200).send('User Timeline');
 }
 
 function getHomeTimeline(req, res) {
   // console.log(`Params: ${JSON.stringify(req.params)}`);
   // console.log(`User logged: ${req.user}`);
-
   User.findOne({ _id: req.user }, { friends: true, _id: false }, (error, user) => {
     // console.log(user.friends);
     user.friends.push(req.user);
     if (error) res.status(500).send({ message: `Error: ${error}` });
     Story.find({ 'user._id': { $in: user.friends }, active: true })
       .populate('users')
-      .sort({ composeDate: -1 })
+      .sort({ createdAt: -1 })
       .exec((err, stories) => {
         // console.log(`Stories: ${stories}`);
         res.status(200).send({ message: 'Request Acepted', stories });
